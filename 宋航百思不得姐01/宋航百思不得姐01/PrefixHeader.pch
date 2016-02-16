@@ -1,0 +1,36 @@
+//
+//  PrefixHeader.pch
+//  宋航百思不得姐01
+//
+//  Created by admin on 16/1/26.
+//  Copyright © 2016年 admin. All rights reserved.
+//
+
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+#import "SHConst.h"
+#import "UIView+SHExtension.h"
+#import "NSDate+SHExtension.h"
+#import "UIBarButtonItem+SHExtension.h"
+#import "UIImage+SHExtension.h"
+#ifdef DEBUG
+#define MyLog(...) NSLog(__VA_ARGS__)
+#else
+#define MyLog(...)
+#endif
+
+#define MyLogFunc MyLog(@"%s",__func__)
+
+
+#define SHColor(r,g,b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0];
+
+#define SHGlobalColor SHColor(223.0,223.0,223.0)
+
+#define SHScreenW [UIScreen mainScreen].bounds.size.width
+#define SHScreenH [UIScreen mainScreen].bounds.size.height
+
+
+#endif /* PrefixHeader_pch */
+

@@ -1,0 +1,29 @@
+1.iso  textField attributed plain
+2.精华中的帖子  时间显示还未完成
+3.42.cell高度自适应  最后一行只有一个字的出现问题
+包含换行符出现问题
+
+
+
+
+
+
+
+新三方框架总结：
+    MJExtension JSON  --->  Model
+    CACirclarProgress   环形的进度条
+        用法：在图片上拉一个View 关联view 为框架里面的一个东西
+
+总结：
+    使用第三方库：
+AFNetworking:
+DACircularProgress:
+MJExtension:
+MJRefresh:
+pop
+SDWebImage:
+SVProgressHUD:
+
+
+
+

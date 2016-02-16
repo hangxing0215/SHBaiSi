@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SHRecommendViewController">
+            <connections>
+                <outlet property="categoryTableView" destination="Yo5-3p-ueN" id="XVE-pu-14t"/>
+                <outlet property="userTableView" destination="qak-k6-Mb9" id="I8H-VE-QOu"/>
+                <outlet property="view" destination="iN0-l3-epB" id="ncV-JC-cNB"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Yo5-3p-ueN" userLabel="左侧">
+                    <rect key="frame" x="0.0" y="0.0" width="70" height="600"/>
+                    <animations/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="70" id="EdN-fz-TFg"/>
+                    </constraints>
+                    <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="Q3T-6G-Kwy"/>
+                        <outlet property="delegate" destination="-1" id="DTG-JK-nn4"/>
+                    </connections>
+                </tableView>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="qak-k6-Mb9" userLabel="右侧">
+                    <rect key="frame" x="70" y="0.0" width="530" height="600"/>
+                    <animations/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="ZY3-la-tqg"/>
+                        <outlet property="delegate" destination="-1" id="6Cm-GW-4NO"/>
+                    </connections>
+                </tableView>
+            </subviews>
+            <animations/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="Yo5-3p-ueN" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="1MO-B1-iW6"/>
+                <constraint firstAttribute="bottom" secondItem="Yo5-3p-ueN" secondAttribute="bottom" id="7rH-IX-2yN"/>
+                <constraint firstItem="qak-k6-Mb9" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="P6A-Kl-0yp"/>
+                <constraint firstItem="qak-k6-Mb9" firstAttribute="leading" secondItem="Yo5-3p-ueN" secondAttribute="trailing" id="g1y-t0-CZQ"/>
+                <constraint firstAttribute="bottom" secondItem="qak-k6-Mb9" secondAttribute="bottom" id="lyF-gp-vPj"/>
+                <constraint firstAttribute="trailing" secondItem="qak-k6-Mb9" secondAttribute="trailing" id="pQh-RL-HsP"/>
+                <constraint firstItem="Yo5-3p-ueN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="vhM-ai-IL1"/>
+            </constraints>
+            <point key="canvasLocation" x="273" y="226"/>
+        </view>
+    </objects>
+</document>

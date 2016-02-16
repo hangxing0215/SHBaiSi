@@ -1,0 +1,230 @@
+1. 要实现左上角的返回按钮的样式
+    自定义导航控制器  重写push 方法
+2. 第一个界面左上角不变  其他的推出来的界面要改变
+   可以使用 self.childViewControllers.count > 1 进行判断
+3. 设置按钮的排布
+//[backButton sizeToFit];
+backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+4.//隐藏底部的tabBar
+viewController.hidesBottomBarWhenPushed = YES;
+5.//第一次使用时调用
++ (void)initialize
+{}
+6. 如果调用appearance 方法  相关类的属性   全部都会变为那个样子。
+7. 给已经有的类创建storyboard
+   User Interface-->View-->关联类-->右键File's Owner 把view连接到创建的storyboard'
+8.设置按钮时，最好使用自定义 custome  因为system 的会有系统默认的一些内容。
+9. xml 中标签文字换行  按住alt按键 enter
+10. 进行网络请求要在plist文件中进行设置安全的那个
+11. 添加tableview 右键tableview把控制器代理和数据源代理设置
+12.用UINib 创建时动态
+NSStringFromClass([SHRecommendCategoryCell class])
+13.MJExtension  三方框架
+self.categoriesArray = [模型 objectArrayWithKeyValuesArray:responseObject[@"list"]];
+
+14.去除没有显示内容的单元格
+self.tableView.tableFooterView = [UIView new];
+15.tableview  clearcolor
+    seperator  取消
+16//默认选择第一行
+[self.categoryTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionTop];
+17.第二个tableview的一部分不显示
+//不让默认设置tableview的y值
+self.automaticallyAdjustsScrollViewInsets = NO;
+self.categoryTableView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
+
+18.重复发请求问题
+    每请求一次都会都会存入一个可变数组  下次判断数组是否有内容
+19.如果网络请求数据较慢    就会出现上次的数据滞留
+//马上刷新右侧数据，防止上次请求的残留数据
+[self.userTableView reloadData];
+20.刷新控件刚进入时会出现
+//每次刷新右边数据时，都控制footer显示或者隐藏
+self.userTableView.mj_footer.hidden = (category.users.count == 0);
+因为每次切换tableview时都会进入每个分区有多少数据方法。在这个方法中写入上面的那些代码。
+21.用户连续点击关注左侧的按钮，上次的数据还没有回来。
+解决方案：用一个全局属性存上上一个属性   然后每次进入请求方法就会判断。
+
+22.当用户这边右侧表格进行了请求  但是数据没有回来，用户点击了返回，代码还会执行
+解决方案： [self.manager.operationQueue cancelAllOperations];
+23.对于下拉刷新，用户想要的是最新的数据，如果能取到最上面的一条数据的id，只需要拿到比他大的id就可以，但是百思不得姐的服务器不支持这个，只支持页码请求，所以
+24.tableviewcell要和左右都有间距
+    （1）改变contentView的大小
+    （2）改变cell的宽高    重写setFrame 方法
+    （3）给cell里面重新放入一个view
+
+25.不让别人不能修改你的控件的大小  重写setFrame  和 setBounds
+26.自定义竖直的按钮
+27.文本框底部是你白色，borderstyle 设置
+28.设置按钮圆角
+button.layer.cornerRadius = 5;
+button.layer.masksToBounds = YES;
+29.富文本
+(1)
+NSMutableAttributedString *string = [[NSMutableAttributedString alloc]initWithString:@"圣者为王"];
+[string setAttributes:
+@{NSForegroundColorAttributeName : [UIColor greenColor]}
+range : NSMakeRange(0, 1)];
+ self.phoneNumberText.attributedPlaceholder = string;
+(2)重写   textField  drawPlaceHolderRect
+(3) 通过runtime看看其中都有哪些属性
+#import <objc/runtime.h>
+///看看类的底层有什么
++ (void)initialize
+{
+unsigned int count = 0;
+//拷贝出所有成员变量列表
+Ivar *vars = class_copyIvarList([UITextField class], &count);
+for (int i = 0; i < count; i++) {
+Ivar var = *(vars + i);
+NSLog(@"%s",ivar_getName(var));
+}
+free(vars);
+}
+30.自己写的某些控件出现需要动画
+[UIView animateWithDuration:0.1 animations:^{
+[self.view layoutIfNeeded];
+}];
+31.点击右上角的切换注册按钮，会让当前的登录界面消失，注册界面出现
+    问题： 用约束的方式来做  但是出现一半过去，一半没过去
+    解决方案    对于那块设置左边距  宽度  不要设置右边距。
+self.loginViewConstraint.constant -= self.view.bounds.size.width;
+32.对于软件安装后只是执行一次
+//获取当前版本号
+NSString *key = @"CFBundleShortVersionString";
+NSString *currentVersion = [NSBundle mainBundle].infoDictionary[key];
+NSString *sandBoxVersion = [[NSUserDefaults standardUserDefaults] stringForKey:key];
+if (![currentVersion isEqualToString:sandBoxVersion] ) {
+//指导用户的界面
+SHPushGuideView *pushGuideView = [SHPushGuideView guideView ];
+pushGuideView.frame = self.window.bounds;
+[self.window addSubview:pushGuideView];
+//同时把这个存入沙盒
+[[NSUserDefaults standardUserDefaults] setValue:currentVersion forKey:key];
+[[NSUserDefaults standardUserDefaults] synchronize];
+}
+33.获取当前window
+UIWindow *window = [UIApplication sharedApplication ].keyWindow;
+34.精华模块中  设置上面的titleView 对于下面的红色导航条，如果先设置x后设置宽度，会出现第一次点击按钮偏一点的问题
+35.titlesView 中  第一个按钮要默认被选中 但是下面的指示器不出现
+原因：当时button还没有创建
+方案：//让button强制出现
+(方式一)[button.titleLabel sizeToFit];
+（方式二）强制布局：[button layoutIfNeeded];
+36.当出现scrollView的布局上层出现问题，可以尝试下面的属性
+self.automaticallyAdjustsScrollViewInsets = NO;
+37.获取状态栏
+[[UIApplication sharedApplication]statusBarFrame]
+38.操纵滚懂条的内边距
+scrollIndicatorInsets
+39.MJRefrush控件显示不到位的解决方案
+self.tableView.mj_header.autoChangeAlpha = YES;
+40.写一个时间的分类，包含传入日期距现在多少年 月 日 时 分 秒
+    当前时间是不是今年  是不是今天  是不是昨天
+41.计算文字高度的方法
+CGFloat textH = [topic.text boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:13]} context:nil].size.height;
+
+42.引用属性是weak 懒加载时不能直接简单创建，中间保存一下 先添加进去到视图中
+43.图片视图的frame 已经设置，但是宽高还是不能正常显示
+试着设置self.autoresizingMask = UIViewAutoresizingNone;
+44.aspectToFit  图片保持宽高比
+45.clip subviews  切割内部显示图片
+46.pod search 查看github上面是不是有对应的三方框架
+47.规避第三方框架的风险  对第三方框架进行封装 
+48.当从一个view弹出一个控制器，无法完成，用跟视图控制器来完成
+解决方案：[[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:vc animated:YES completion:nil];
+49.相册保存图片
+UIImageWriteToSavedPhotosAlbum(self.imageView.image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
+50.解决长图显示最上边缘的方法
+//解决长大图的缩略图
+//开启图形上下文
+UIGraphicsBeginImageContextWithOptions(topic.pictureFrame.size, YES, 0.0);
+
+//讲下载好的图片画上去
+CGFloat pictureW = self.pictureView.width;
+CGFloat pictureH = pictureW * topic.height / topic.width;
+[image drawInRect:CGRectMake(0, 0, pictureW, pictureH)];
+
+//把画好的图片赋值给图片
+self.pictureView.image = UIGraphicsGetImageFromCurrentImageContext();
+//结束上下文
+UIGraphicsEndPDFContext();
+}
+
+51.动画问题
+/**
+*  1.Core Animation的动画只能添加到layer上
+2.pop的动画能添加到任何对象
+3.pop的底层并非基于Core Animation,是基于CADisplayLink
+4.Core Animation的动画仅仅是表象 并不会真正修改对象的frame size等值
+5.pop的动画实际是修改对象的属性，真正的修改了对象的属性
+*/
+52.开始不要设置宽高，要不按钮会从左上角出来
+53.在一个控制器上显示另一个视图
+注意:UIWindow不能是局部变量
+window = [[UIWindow alloc]init];
+window.backgroundColor = [[UIColor redColor]colorWithAlphaComponent:0.5];
+window.frame = self.window.bounds;
+window.hidden = NO;
+54.要想做半透明的东西，可以使用UIWindow
+55.MJExtension  解决数组字典 模型问题
++ (NSDictionary *)mj_objectClassInArray
+{
+return @{@"字典" : @"模型"};
+}
++ (NSDictionary *)mj_replacedKeyFromPropertyName
+{
+return @{@"旧属性" : @"新属性"};
+}
+
+56.以前想保住一个对象的命，使用成员变量  但是类方法中不能使用成员变量   使用全局变量  写成静态的，其他的也访问不了。
+57.点击状态栏顶部相应时间，可以制作一个window，让他等于状态栏的高度，
+58.转换坐标系的高级方法
+//判断一个控件是不是在窗口的frame中
+CGRect newFrame = [subview.superview convertRect:subview.frame toView:nil];
+CGRect winBounds = [UIApplication sharedApplication].keyWindow.bounds;
+BOOL isShowOnWindow = !subview.isHidden && subview.alpha > 0.01 && CGRectIntersectsRect(newFrame, winBounds);
+59.IOS7之后状态栏默认由控制器控制。
+60.由于新建window的作用  登录界面进去后状态栏显示为白色了
+    解决方案：info.plist 中 View controller-based status bar appearance  设置为NO
+61.github: git branch 看看有哪些分支
+            git branch 分支名称  新建分支
+            git chechout 分支名称    切换分支
+            git branch -D 分支名称   删除分支
+62.menucontroller学习
+    让没有复制粘贴功能的控件拥有这个功能。
+https://github.com/hangxing0215/SHMenuController
+63.cell点击后不要变为灰色
+self.selectionStyle = UITableViewCellSelectionStyleNone;
+64.画图的步骤：
+        （1）开启图像上下文
+        （2）获得图形上下文
+        （3）添加一个圆
+        （4）裁剪
+        (5)把图形画上去
+        （6）得到图形
+        （7）关闭图形上下文
+65.对于判断这次和上次是不是相同  可以把上次的保存上然后判断
+66.tableView 顶部太高  重写layoutFrame 或者  调整内边距
+67.uiview想要背景图片  可以重写drawRect 方法画个背景图片[image drawinrect:rect];
+68.setneeddisplay 重绘界面
+69.以后如果出现设置了，但是没有效果，试着强制刷新layoutIfNeed  注意控件的view
+70.textView 继承自scrollView
+71.实现textView拥有占位文字，自定义，继承自他，同时用drawRect绘制占位文字。
+72.    //setNeedsDisplay  在适当的时机调用drawRect()
+//setNeedsLayout 在适当的时机调用layoutSubviews()
+73.键盘操作
+//给键盘添加通知
+[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
+CGRect keyboardF = [note.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+74.三种方式让按钮的尺寸等于当前背景图片的尺寸
+addButton.size = [UIImage imageNamed:@"tag_add_icon"].size;
+addButton.size = addButton.currentImage.size;
+addButton.size = [addButton imageForState:UIControlStateNormal].size;
+75.追根朔源控制器
+presentingViewController     向内找
+presentedViewController  向外找
+
+
+
